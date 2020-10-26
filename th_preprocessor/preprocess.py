@@ -18,13 +18,13 @@ COMBINED_NORMALIZE_PAIRS = (
 
 # Words to be used as replacement
 # (normalization for better classification, we hope)
-REPLACE_LINK = " LINK "
-REPLACE_EMAIL = " EMAIL "
-REPLACE_AT_MENTION = " NAME "
-REPLACE_HAHA = " HAHA "
-REPLACE_NUMBER = " NUMBER "
-REPLACE_PHONE = " PHONE "
-REPLACE_DATE = " DATE "
+REPLACE_LINK = " WSLINK "
+REPLACE_EMAIL = " WSEMAIL "
+REPLACE_AT_MENTION = " WSNAME "
+REPLACE_HAHA = " WSHAHA "
+REPLACE_NUMBER = " WSNUMBER "
+REPLACE_PHONE = " WSPHONE "
+REPLACE_DATE = " WSDATE "
 
 # Check word class
 RE_NUM = re.compile(r"[+\-]?(?:[0-9๑๒๓๔๕๖๗๘๙๐]+,?)+(?:\.[0-9๑๒๓๔๕๖๗๘๙๐]*)?")
