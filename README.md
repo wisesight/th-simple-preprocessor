@@ -21,7 +21,7 @@ text = '"::::: อย่างไรก็ตามนูร์ ฮิชัม 
 words = preprocess(text)
 
 print(words) 
-# ['อย่างไรก็ตาม', 'นูร์', 'ฮิ', 'ชัม', 'อับ', 'ดุล', 'เลาะ', 'ห์', 'wsnumber', 'wsnumber', 'wsnumber', 'wsurl']
+# อย่างไรก็ตามนูร์ ฮิชัม อับดุลเลาะห์ WSNUMBER WSNUMBER WSNUMBER WSLINK
 ```
 
 ## __Copyright__
