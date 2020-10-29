@@ -10,6 +10,7 @@ from th_preprocessor.data import (
     THAI_STOPWORDS,
     THAI_TO_ARABIC_DIGIT_PAIRS,
     TOKENIZE_PAIRS,
+    THAI_STOPWORDS,
 )
 
 COMBINED_NORMALIZE_PAIRS = (
@@ -267,3 +268,12 @@ def preprocess(text: str) -> str:
     text = remove_dup_spaces(text)
 
     return text
+
+def remove_stopwords(tokens: list, custom_stopwords: list = [], include_legacy_stopwords: bool = True) -> list:
+    stopwords = list(THAI_STOPWORDS)
+    if custom_stopwords:
+        if include_legacy_stopwords:
+            stopwords += custom_stopwords
+        else:
+            stopwords = custom_stopwords
+    return [token for token in tokens if token not in stopwords]
