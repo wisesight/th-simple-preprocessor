@@ -34,7 +34,7 @@ class Test_preprocess(object):
         self.number_longer_text = "1234"
         self.latin_text = "ABCD1234"
         self.thai_text = "อยู่คนเดียวได้บ้างแล้ว"
-        self.mix_text = "hey123ไม่ได้เป็นคนที่เกเร"
+        self.mix_text = "hey123ไม่ได้เป็นคนที่เกเรyoyo&แฮ่&&hello"
         self.unnorm_text = "เเําฤาฦา๑๒๓๔๕๖๗๘๙๐,.=\0\r\n\t\u00A0" + string.punctuation
         self.link_text = "http://www.youtube.com"
         self.mention_text = "@test1234"
@@ -128,7 +128,7 @@ class Test_preprocess(object):
         assert_equal(remove_dup_spaces(self.dup_space_text), expected_result)
 
     def test_insert_spaces(self):
-        expected_result = "hey 123 ไม่ได้เป็นคนที่เกเร"
+        expected_result = "hey 123 ไม่ได้เป็นคนที่เกเร yoyo & แฮ่ && hello"
         assert_equal(insert_spaces(self.mix_text), expected_result)
 
     def test_remove_emoji(self):
@@ -140,7 +140,7 @@ class Test_preprocess(object):
         assert_equal(normalize_emoji(self.emoji_text), expected_result)
 
     def test_preprocess(self):
-        expected_result = "test html WSLINK WSNAME WSEMAIL WSPHONE แำฤๅฦๅ WSNUMBER ! ? hey WSNUMBER ไม่ได้เป็นคนที่เกเร WSHAHA 🌈 อย่าฟอล เดี๋ยวจน 🌻 รีวิวในแท็ก WSNUMBER คิดว่าน่าจะเหลือแค่ภาษาไทย กับ english และ 🤔 🤔 🤔 🤔 🤣"
+        expected_result = "test html WSLINK WSNAME WSEMAIL WSPHONE แำฤๅฦๅ WSNUMBER ! ? hey WSNUMBER ไม่ได้เป็นคนที่เกเร yoyo แฮ่ hello WSHAHA 🌈 อย่าฟอล เดี๋ยวจน 🌻 รีวิวในแท็ก WSNUMBER คิดว่าน่าจะเหลือแค่ภาษาไทย กับ english และ 🤔 🤔 🤔 🤔 🤣"
         assert_equal(preprocess(self.complex_text), expected_result)
 
     def test_preprocess_real_text(self):

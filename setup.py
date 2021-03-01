@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as fh:
 
 setup(
     name="th-simple-preprocessor",
-    version="0.3.1",
+    version="0.4.0",
     author="WISESIGHT Product Development",
     author_email="tequila@wisesight.com",
     description="Simple Thai Preprocess Functions",

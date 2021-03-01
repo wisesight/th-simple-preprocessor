@@ -5,13 +5,8 @@ from typing import Iterable, List, Set, Tuple, Union
 
 import emoji
 
-from th_preprocessor.data import (
-    THAI_NORMALIZE_PAIRS,
-    THAI_STOPWORDS,
-    THAI_TO_ARABIC_DIGIT_PAIRS,
-    TOKENIZE_PAIRS,
-    THAI_STOPWORDS,
-)
+from th_preprocessor.data import (THAI_NORMALIZE_PAIRS, THAI_STOPWORDS,
+                                  THAI_TO_ARABIC_DIGIT_PAIRS, TOKENIZE_PAIRS)
 
 COMBINED_NORMALIZE_PAIRS = (
     THAI_NORMALIZE_PAIRS + THAI_TO_ARABIC_DIGIT_PAIRS + TOKENIZE_PAIRS
@@ -90,7 +85,11 @@ RE_NONDIGIT_DIGIT = re.compile(r"(\D)([\d\.,])")  # (Non-Digit)(Digit)
 RE_THAI_NONTHAI = re.compile(
     r"([\u0E00-\u0E4F])([^\u0E00-\u0E4F\s])"
 )  # (Thai)(Non-Thai)
+RE_NONTHAI_THAI = re.compile(
+    r"([^\u0E00-\u0E4F\s])([\u0E00-\u0E4F])"
+)  # (Non-Thai)(Thai)
 RE_LATIN_NONLATIN = re.compile(r"([a-zA-Z])([^a-zA-Z\s])")  # (Latin)(Non-Latin)
+RE_NONLATIN_LATIN = re.compile(r"([^a-zA-Z\s])([a-zA-Z])")  # (Non-Latin)(Latin)
 
 RE_EMOJI = emoji.get_emoji_regexp()  # use pre-complied pattern from emoji library
 RE_NONTHAI_ENG_EMOJI = re.compile(
@@ -215,7 +214,10 @@ def insert_spaces(text: str) -> str:
     text = RE_DIGIT_NONDIGIT.sub(r"\1 \2", text)  # (Digit)(Non-digit)
     text = RE_NONDIGIT_DIGIT.sub(r"\1 \2", text)  # (Non-Digit)(Digit)
     text = RE_THAI_NONTHAI.sub(r"\1 \2", text)  # (Thai)(Non-Thai)
-    text = RE_LATIN_NONLATIN.sub(r"\1 \2", text)  # (Latin)(Non-Thai)
+    text = RE_NONTHAI_THAI.sub(r"\1 \2", text)  # (Non-Thai)(Thai)
+    text = RE_LATIN_NONLATIN.sub(r"\1 \2", text)  # (Latin)(Non-Latin)
+    text = RE_NONLATIN_LATIN.sub(r"\1 \2", text)  # (Non-Latin)(Latin)
+    
     return text
 
 
