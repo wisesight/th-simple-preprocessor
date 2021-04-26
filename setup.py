@@ -15,7 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/wisesight/th-simple-preprocessor",
-    install_requires=requirements,
+    install_requires=["emoji"],
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
