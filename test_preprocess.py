@@ -9,6 +9,7 @@ from th_preprocessor.preprocess import (
     is_latin_str,
     is_number_str,
     is_thai_str,
+    normalize_accented_chars,
     normalize_at_mention,
     normalize_email,
     normalize_emoji,
@@ -16,10 +17,12 @@ from th_preprocessor.preprocess import (
     normalize_link,
     normalize_num,
     normalize_phone,
+    normalize_special_chars,
     normalize_text_pairs,
     preprocess,
     remove_dup_spaces,
     remove_emoji,
+    remove_hashtags,
     remove_others_char,
     remove_tag,
     replace_rep_after,
@@ -41,6 +44,9 @@ class Test_preprocess(object):
         self.email_text = "test_eiei_za@gmail.com"
         self.haha_text = "555555"
         self.phone_text = "0123456789"
+        self.special_text = "𝑇ℎ𝑒 𝑚𝑜𝑠𝑡 𝑖𝑚𝑝𝑜𝑟𝑡𝑎𝑛𝑡 𝑡ℎ𝑖𝑛𝑔 𝑖𝑠 𝑡𝑜 𝑒𝑛𝑗𝑜𝑦 น้าทุกคน"
+        self.accented_text = "Cześć"
+        self.hashtags_text = "Saturday be like this #pinklover #purplehair #isseymiyake #baobaoisseymiyake #baobaothailand #cafe"
         self.tag_text = "<div>Test HTML</div>"
         self.dup_space_text = "นอนได้แล้ว\n\n\n\n\nเดี๋ยวพรุ่งนี้เขาก็กลับมา"
         self.emoji_text = "🌈อย่าฟอล เดี๋ยวจน🌻รีวิวในแท็ก"
@@ -118,6 +124,18 @@ class Test_preprocess(object):
     def test_normalize_phone(self):
         expected_result = " WSPHONE "
         assert_equal(normalize_phone(self.phone_text), expected_result)
+
+    def test_normalize_special_chars(self):
+        expected_result = "The most important thing is to enjoy น้าทุกคน"
+        assert_equal(normalize_special_chars(self.special_text), expected_result)
+
+    def test_normalize_accented_chars(self):
+        expected_result = "Czesc"
+        assert_equal(normalize_accented_chars(self.accented_text), expected_result)
+
+    def test_remove_hashtags(self):
+        expected_result = "Saturday be like this      "
+        assert_equal(remove_hashtags(self.hashtags_text), expected_result)
 
     def test_remove_tag(self):
         expected_result = "Test HTML"
