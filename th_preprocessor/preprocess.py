@@ -1,12 +1,18 @@
 import html
 import re
+import unicodedata
 from datetime import datetime
 from typing import Iterable, List, Set, Tuple, Union
 
 import emoji
 
-from th_preprocessor.data import (THAI_NORMALIZE_PAIRS, THAI_STOPWORDS,
-                                  THAI_TO_ARABIC_DIGIT_PAIRS, TOKENIZE_PAIRS)
+from th_preprocessor.data import (
+    ACCENTED_PAIRS,
+    THAI_NORMALIZE_PAIRS,
+    THAI_STOPWORDS,
+    THAI_TO_ARABIC_DIGIT_PAIRS,
+    TOKENIZE_PAIRS,
+)
 
 COMBINED_NORMALIZE_PAIRS = (
     THAI_NORMALIZE_PAIRS + THAI_TO_ARABIC_DIGIT_PAIRS + TOKENIZE_PAIRS
@@ -39,6 +45,7 @@ RE_EXT = re.compile(
 RE_AT_MENTION = re.compile(r"(?:^|\s)@\S+")
 RE_EMAIL = re.compile(r"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b")
 RE_HAHA = re.compile(r"\b(?:ha\s*){2,}|\u0E16{3,}|5{3,}(?!.\d)\b", flags=re.IGNORECASE)
+RE_HASHTAGS = re.compile(r"#([a-zA-Zก-๛0-9]+[a-zA-Zก-๛0-9]*)")
 
 # Phone numbers
 phone_body_patterns = [
@@ -175,6 +182,22 @@ def normalize_phone(text: str, place_holder: str = REPLACE_PHONE) -> str:
     return text
 
 
+def normalize_accented_chars(text: str) -> str:
+    return replace_text(text, ACCENTED_PAIRS)
+
+
+def normalize_special_chars(text: str) -> str:
+    return (
+        unicodedata.normalize("NFKD", text)
+        .encode("utf-8", errors="ignore")
+        .decode("utf-8")
+    )
+
+
+def remove_hashtags(text: str) -> str:
+    return RE_HASHTAGS.sub("", text)
+
+
 def remove_tag(text: str) -> str:
     """
     Remove markup tags using regular expression.
@@ -217,7 +240,7 @@ def insert_spaces(text: str) -> str:
     text = RE_NONTHAI_THAI.sub(r"\1 \2", text)  # (Non-Thai)(Thai)
     text = RE_LATIN_NONLATIN.sub(r"\1 \2", text)  # (Latin)(Non-Latin)
     text = RE_NONLATIN_LATIN.sub(r"\1 \2", text)  # (Non-Latin)(Latin)
-    
+
     return text
 
 
@@ -271,7 +294,10 @@ def preprocess(text: str) -> str:
 
     return text
 
-def remove_stopwords(tokens: list, custom_stopwords: list = [], include_legacy_stopwords: bool = True) -> list:
+
+def remove_stopwords(
+    tokens: list, custom_stopwords: list = [], include_legacy_stopwords: bool = True
+) -> list:
     stopwords = list(THAI_STOPWORDS)
     if custom_stopwords:
         if include_legacy_stopwords:
