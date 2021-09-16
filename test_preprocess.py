@@ -45,7 +45,7 @@ class Test_preprocess(object):
         self.haha_text = "555555"
         self.phone_text = "0123456789"
         self.special_text = "𝑇ℎ𝑒 𝑚𝑜𝑠𝑡 𝑖𝑚𝑝𝑜𝑟𝑡𝑎𝑛𝑡 𝑡ℎ𝑖𝑛𝑔 𝑖𝑠 𝑡𝑜 𝑒𝑛𝑗𝑜𝑦 น้าทุกคน"
-        self.accented_text = "Cześć"
+        self.accented_text = "Cześć NESCAFÉ"
         self.hashtags_text = "Saturday be like this #pinklover #purplehair #isseymiyake #baobaoisseymiyake #baobaothailand #cafe"
         self.tag_text = "<div>Test HTML</div>"
         self.dup_space_text = "นอนได้แล้ว\n\n\n\n\nเดี๋ยวพรุ่งนี้เขาก็กลับมา"
@@ -130,7 +130,7 @@ class Test_preprocess(object):
         assert_equal(normalize_special_chars(self.special_text), expected_result)
 
     def test_normalize_accented_chars(self):
-        expected_result = "Czesc"
+        expected_result = "Czesc NESCAFE"
         assert_equal(normalize_accented_chars(self.accented_text), expected_result)
 
     def test_remove_hashtags(self):
