@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="th-simple-preprocessor",
-    version="0.7.0",
+    version="0.7.1",
     author="WISESIGHT Product Development",
     author_email="tequila@wisesight.com",
     description="Simple Thai Preprocess Functions",
