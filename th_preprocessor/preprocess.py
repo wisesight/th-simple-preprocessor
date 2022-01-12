@@ -72,13 +72,8 @@ phone_regex = (
 )
 RE_PHONE = re.compile(phone_regex)
 
-# Duplicated characters: aaaa, ! ! ! !, ะะะะะ
-RE_DUP_C_C = re.compile(r"(?:^|\s)(\S{1,5})(\s+\1)+")  # duplicated isolated chars/words
-RE_DUP_CC = re.compile(r"(\D{2,})\1{3,}")  # duplicated non-digits
-RE_DUP_C6 = re.compile(r"(\D)\1{5,}")  # duplicated non-digits (six or more characters)
-RE_DUP_THAI = re.compile(
-    r"([\u0E2F-\u0E3A\u0E3F\u0E40-\u0E4F\?\!])\1+"
-)  # Thai vowels/symbols
+# Any non-whitesplace character and non-digits duplication
+RE_DUP_CHARS = re.compile(r"([^0-9๐-๙\s])(\1{2,})")
 
 
 # Duplicated whitespaces: spaces, tabs, empty lines, leading/trailing spaces
@@ -208,21 +203,14 @@ def remove_tag(text: str) -> str:
     return text
 
 
-# def remove_dup_chars(text: str) -> str:
-#     """
-#     Replace duplicated characters
-#     e.g.
-#     righttttt -> rightttt
-#     มรรรรรค -> มรรรรค
-#     มาาาาาาาาาาาาาาาาาาาาาาากกกก -> มากกกก
-#     อิอิอิอิอิอิ -> อิอิอิอิ
-#     ! ! ! ! -> !
-#     """
-#     text = RE_DUP_C_C.sub(r"\1", text)
-#     text = RE_DUP_CC.sub(r"\1\1", text)
-#     text = RE_DUP_C6.sub(r"\1\1\1\1\1", text)
-#     text = RE_DUP_THAI.sub(r"\1", text)
-#     return text
+def replace_dup_chars(text: str) -> str:
+    """
+    Remove duplicate characters which are any non-whitespace and non-digits.
+    ใช่ป่าวววววว -> ใช่ป่าว
+    that was righttttttt -> that was right
+    แม่งงงจัด -> แม่งจัด (please use with caution)
+    """
+    return RE_DUP_CHARS.sub(__replace_rep, text)
 
 
 # " ".join(text.split()) will remove newlines, which we may like to preserve them
@@ -230,7 +218,14 @@ def remove_dup_spaces(text: str) -> str:
     text = RE_DUP_SPACE.sub(" ", text)
     text = RE_DUP_EMPTYLINE.sub("\n", text)
     text = RE_STRIP.sub("", text)
+
     return text.strip()
+
+
+def __replace_rep(matched: re.Match) -> str:
+    group, _ = matched.groups()
+
+    return f"{group}"
 
 
 def insert_spaces(text: str) -> str:
@@ -255,16 +250,6 @@ def normalize_emoji(text: str) -> str:
 def remove_others_char(text):
     text = re.sub(RE_NONTHAI_ENG_EMOJI, " ", text)
     return text
-
-
-def replace_rep_after(text: str) -> str:
-    def _replace_rep(m):
-        c, _ = m.groups()
-        return f"{c}"
-
-    re_rep = re.compile(r"(\S)(\1{2,})")
-
-    return re_rep.sub(_replace_rep, text)
 
 
 # The current sequence of operations is designed to produce text

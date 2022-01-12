@@ -25,7 +25,7 @@ from th_preprocessor.preprocess import (
     remove_hashtags,
     remove_others_char,
     remove_tag,
-    replace_rep_after,
+    replace_dup_chars,
 )
 
 
@@ -169,6 +169,6 @@ class Test_preprocess(object):
         expected_result = "         คิดว่าน่าจะเหลือแค่ภาษาไทย กับ                   English และ                    🤔🤔🤔🤔        🤣"
         assert_equal(remove_others_char(self.noodle_text), expected_result)
 
-    def test_replace_rep_after(self):
+    def test_replace_dup_chars(self):
         expected_result = "เพราะว่าเธอและเขา ถ่านไฟเก่ายังร้อนรอวันรื้อฟื้น"
-        assert_equal(replace_rep_after(self.dup_text), expected_result)
+        assert_equal(replace_dup_chars(self.dup_text), expected_result)
