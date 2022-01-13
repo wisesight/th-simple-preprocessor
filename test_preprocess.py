@@ -26,6 +26,7 @@ from th_preprocessor.preprocess import (
     remove_others_char,
     remove_tag,
     replace_dup_chars,
+    replace_dup_emojis,
 )
 
 
@@ -51,6 +52,7 @@ class Test_preprocess(object):
         self.dup_space_text = "นอนได้แล้ว\n\n\n\n\nเดี๋ยวพรุ่งนี้เขาก็กลับมา"
         self.emoji_text = "🌈อย่าฟอล เดี๋ยวจน🌻รีวิวในแท็ก"
         self.noodle_text = "˚┉┉┉┉┉༝✧ คิดว่าน่าจะเหลือแค่ภาษาไทย กับ ˢʰᵉ 𝙧𝙖𝙩𝙘𝙝𝙖𝙙𝙖𝙥𝙞𝙨𝙚𝙠 English และ  ﾏﾝﾎﾞﾏﾝﾎﾞ．．．ນະຄອນຫລ🤔🤔🤔🤔ວງ．ﺍﻟﻘﻔﺺ🤣"
+        self.dup_emojis_text = "อ้ายอ้วน😣😣"
         self.complex_text = " ".join(
             [
                 self.tag_text,
@@ -172,3 +174,7 @@ class Test_preprocess(object):
     def test_replace_dup_chars(self):
         expected_result = "เพราะว่าเธอและเขา ถ่านไฟเก่ายังร้อนรอวันรื้อฟื้น"
         assert_equal(replace_dup_chars(self.dup_text), expected_result)
+
+    def test_replace_dup_emojis(self):
+        expected_result = "อ้ายอ้วน😣"
+        assert_equal(replace_dup_emojis(self.dup_emojis_text), expected_result)
