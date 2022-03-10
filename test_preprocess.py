@@ -53,6 +53,7 @@ class Test_preprocess(object):
         self.emoji_text = "🌈อย่าฟอล เดี๋ยวจน🌻รีวิวในแท็ก"
         self.noodle_text = "˚┉┉┉┉┉༝✧ คิดว่าน่าจะเหลือแค่ภาษาไทย กับ ˢʰᵉ 𝙧𝙖𝙩𝙘𝙝𝙖𝙙𝙖𝙥𝙞𝙨𝙚𝙠 English และ  ﾏﾝﾎﾞﾏﾝﾎﾞ．．．ນະຄອນຫລ🤔🤔🤔🤔ວງ．ﺍﻟﻘﻔﺺ🤣"
         self.dup_emojis_text = "อ้ายอ้วน😣😣"
+        self.dup_emojis_text_with_dup_numbers = "👧👧👧👧👧👧 111111 3️⃣3️⃣3️⃣3️⃣3️⃣3️⃣"
         self.complex_text = " ".join(
             [
                 self.tag_text,
@@ -178,3 +179,8 @@ class Test_preprocess(object):
     def test_replace_dup_emojis(self):
         expected_result = "อ้ายอ้วน😣"
         assert_equal(replace_dup_emojis(self.dup_emojis_text), expected_result)
+
+    def test_replace_dup_emojis_with_dup_numbers(self):
+        expected_result = "👧 111111 3️⃣"
+        assert_equal(replace_dup_emojis(self.dup_emojis_text_with_dup_numbers), expected_result)
+        
