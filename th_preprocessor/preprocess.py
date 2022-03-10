@@ -96,7 +96,7 @@ RE_NONTHAI_ENG_EMOJI = re.compile(
 
 # Any non-whitesplace character and non-digits duplication
 RE_DUP_CHARS = re.compile(r"([^0-9๐-๙\s])(\1{2,})")
-RE_DUP_EMOJIS = re.compile(r"([{}])(\1{})".format(RE_EMOJI.pattern, "{1,}"))
+RE_DUP_EMOJIS = re.compile(r"{}(\1{})".format(RE_EMOJI.pattern, "{1,}"))
 
 
 def is_date_str(var) -> bool:
