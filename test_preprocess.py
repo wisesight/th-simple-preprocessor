@@ -48,6 +48,7 @@ class Test_preprocess(object):
         self.special_text = "𝑇ℎ𝑒 𝑚𝑜𝑠𝑡 𝑖𝑚𝑝𝑜𝑟𝑡𝑎𝑛𝑡 𝑡ℎ𝑖𝑛𝑔 𝑖𝑠 𝑡𝑜 𝑒𝑛𝑗𝑜𝑦 น้าทุกคน"
         self.accented_text = "Cześć NESCAFÉ"
         self.hashtags_text = "Saturday be like this #pinklover #purplehair #isseymiyake #baobaoisseymiyake #baobaothailand #cafe"
+        self.hashtags_text_with_underscore = "ศูนย์ฉีดวัคซีน เปิด Walk in ทุกเข็ม #covid19 #covid_19 #covid-19"
         self.tag_text = "<div>Test HTML</div>"
         self.dup_space_text = "นอนได้แล้ว\n\n\n\n\nเดี๋ยวพรุ่งนี้เขาก็กลับมา"
         self.emoji_text = "🌈อย่าฟอล เดี๋ยวจน🌻รีวิวในแท็ก"
@@ -139,6 +140,10 @@ class Test_preprocess(object):
     def test_remove_hashtags(self):
         expected_result = "Saturday be like this      "
         assert_equal(remove_hashtags(self.hashtags_text), expected_result)
+    
+    def test_remove_hashtags_with_underscore(self):
+        expected_result = "ศูนย์ฉีดวัคซีน เปิด Walk in ทุกเข็ม   -19"
+        assert_equal(remove_hashtags(self.hashtags_text_with_underscore), expected_result)
 
     def test_remove_tag(self):
         expected_result = "Test HTML"
