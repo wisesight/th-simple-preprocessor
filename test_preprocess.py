@@ -54,6 +54,7 @@ class Test_preprocess(object):
         self.noodle_text = "˚┉┉┉┉┉༝✧ คิดว่าน่าจะเหลือแค่ภาษาไทย กับ ˢʰᵉ 𝙧𝙖𝙩𝙘𝙝𝙖𝙙𝙖𝙥𝙞𝙨𝙚𝙠 English และ  ﾏﾝﾎﾞﾏﾝﾎﾞ．．．ນະຄອນຫລ🤔🤔🤔🤔ວງ．ﺍﻟﻘﻔﺺ🤣"
         self.dup_emojis_text = "อ้ายอ้วน😣😣"
         self.dup_emojis_text_with_dup_numbers = "👧👧👧👧👧👧 111111 3️⃣3️⃣3️⃣3️⃣3️⃣3️⃣"
+        self.mention_text_with_non_whitespace = "twitter:@wisesight"
         self.complex_text = " ".join(
             [
                 self.tag_text,
@@ -184,3 +185,6 @@ class Test_preprocess(object):
         expected_result = "👧 111111 3️⃣"
         assert_equal(replace_dup_emojis(self.dup_emojis_text_with_dup_numbers), expected_result)
         
+    def test_normalize_at_mention_with_non_whitespace(self):
+        expected_result = "twitter: WSNAME "
+        assert_equal(normalize_at_mention(self.mention_text_with_non_whitespace), expected_result)
