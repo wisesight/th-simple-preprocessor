@@ -48,7 +48,12 @@ class Test_preprocess(object):
         self.special_text = "𝑇ℎ𝑒 𝑚𝑜𝑠𝑡 𝑖𝑚𝑝𝑜𝑟𝑡𝑎𝑛𝑡 𝑡ℎ𝑖𝑛𝑔 𝑖𝑠 𝑡𝑜 𝑒𝑛𝑗𝑜𝑦 น้าทุกคน"
         self.accented_text = "Cześć NESCAFÉ"
         self.hashtags_text = "Saturday be like this #pinklover #purplehair #isseymiyake #baobaoisseymiyake #baobaothailand #cafe"
-        self.hashtags_text_with_underscore = "ศูนย์ฉีดวัคซีน เปิด Walk in ทุกเข็ม #covid19 #covid_19 #covid-19"
+        self.hashtags_text_with_underscore = (
+            "ศูนย์ฉีดวัคซีน เปิด Walk in ทุกเข็ม #covid19 #covid_19 #covid-19"
+        )
+        self.hashtags_number = "Biomutant #1 ไทย - ไอขน คนเท่!"
+        self.hashtags_text_with_number = "สวัสดีปีกุน #สวัสดี5555"
+        self.hashtags_number_with_text = "สวัสดีปีระกา #5555สวัสดี"
         self.tag_text = "<div>Test HTML</div>"
         self.dup_space_text = "นอนได้แล้ว\n\n\n\n\nเดี๋ยวพรุ่งนี้เขาก็กลับมา"
         self.emoji_text = "🌈อย่าฟอล เดี๋ยวจน🌻รีวิวในแท็ก"
@@ -140,10 +145,20 @@ class Test_preprocess(object):
     def test_remove_hashtags(self):
         expected_result = "Saturday be like this      "
         assert_equal(remove_hashtags(self.hashtags_text), expected_result)
-    
+
     def test_remove_hashtags_with_underscore(self):
-        expected_result = "ศูนย์ฉีดวัคซีน เปิด Walk in ทุกเข็ม   -19"
-        assert_equal(remove_hashtags(self.hashtags_text_with_underscore), expected_result)
+        expected_result = "ศูนย์ฉีดวัคซีน เปิด Walk in ทุกเข็ม   "
+        assert_equal(
+            remove_hashtags(self.hashtags_text_with_underscore), expected_result
+        )
+
+    def test_remove_hashtags_text_with_number(self):
+        expected_result = "สวัสดีปีกุน "
+        assert_equal(remove_hashtags(self.hashtags_text_with_number), expected_result)
+
+    def test_remove_hashtags_number_with_text(self):
+        expected_result = "สวัสดีปีระกา "
+        assert_equal(remove_hashtags(self.hashtags_number_with_text), expected_result)
 
     def test_remove_tag(self):
         expected_result = "Test HTML"
@@ -187,5 +202,6 @@ class Test_preprocess(object):
 
     def test_replace_dup_emojis_with_dup_numbers(self):
         expected_result = "👧 111111 3️⃣"
-        assert_equal(replace_dup_emojis(self.dup_emojis_text_with_dup_numbers), expected_result)
-        
+        assert_equal(
+            replace_dup_emojis(self.dup_emojis_text_with_dup_numbers), expected_result
+        )
