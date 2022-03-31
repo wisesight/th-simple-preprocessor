@@ -45,7 +45,7 @@ RE_EXT = re.compile(
 RE_AT_MENTION = re.compile(r"(?<=^|(?<=[^a-zA-Z0-9-_\.]))@[^\s()\[\]{}<>]+")
 RE_EMAIL = re.compile(r"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b")
 RE_HAHA = re.compile(r"\b(?:ha\s*){2,}|\u0E16{3,}|5{3,}(?!.\d)\b", flags=re.IGNORECASE)
-RE_HASHTAGS = re.compile(r"#([a-zA-Zก-๛0-9]+[a-zA-Zก-๛0-9]*)")
+RE_HASHTAGS = re.compile(r"#[^\s]+")
 
 # Phone numbers
 phone_body_patterns = [
