@@ -109,6 +109,21 @@ class Test_preprocess(object):
         expected_result = " WSNAME "
         assert_equal(normalize_at_mention(self.mention_text), expected_result)
 
+    def test_normalize_at_mention_with_non_whitespace(self):
+        text = "twitter:@wisesight @123456 (มี@ด้วย)"
+        expected_result = "twitter: WSNAME   WSNAME  (มี WSNAME )"
+        assert_equal(normalize_at_mention(text), expected_result)
+
+    def test_normalize_at_mention_with_punctuation(self):
+        text = "This is not a mention in social media messages but it has to be cleaned: @#$%^@#$%^&"
+        expected_result = "This is not a mention in social media messages but it has to be cleaned:  WSNAME "
+        assert_equal(normalize_at_mention(text), expected_result)
+
+    def test_normalize_at_mention_email(self):
+        text = "email: example@something.com"
+        expected_result = "email: example@something.com"
+        assert_equal(normalize_at_mention(text), expected_result)
+
     def test_normalize_email(self):
         expected_result = " WSEMAIL "
         assert_equal(normalize_email(self.email_text), expected_result)
@@ -183,8 +198,12 @@ class Test_preprocess(object):
 
     def test_replace_dup_emojis_with_dup_numbers(self):
         expected_result = "👧 111111 3️⃣"
-        assert_equal(replace_dup_emojis(self.dup_emojis_text_with_dup_numbers), expected_result)
-        
+        assert_equal(
+            replace_dup_emojis(self.dup_emojis_text_with_dup_numbers), expected_result
+        )
+
     def test_normalize_at_mention_with_non_whitespace(self):
         expected_result = "twitter: WSNAME "
-        assert_equal(normalize_at_mention(self.mention_text_with_non_whitespace), expected_result)
+        assert_equal(
+            normalize_at_mention(self.mention_text_with_non_whitespace), expected_result
+        )
