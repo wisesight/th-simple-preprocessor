@@ -37,7 +37,7 @@ RE_LATIN = re.compile(r"[a-zA-Z0-9\s]+")
 # <tag>, http://, www., .php, @mention, mail@address.com, hahaha, 555, 1234
 # To be normalized
 RE_TAG = re.compile(r"<[^>]+>")
-RE_HTTP_WWW = re.compile(r"(?:\b\S{3,}:\/{1,}\S*)|(?:[wW]{2,}\.\S+)")
+RE_LINK = re.compile(r"((http|https)\:\/\/)?(?<![@\.])(?<=\b)[a-zA-Z0-9ก-๛\.\/\?\:\-_=#]+(\.[a-zA-Z]{2,6})([a-zA-Z0-9ก-๛\.\&\/\?\:@\-_=#]*)")
 RE_EXT = re.compile(
     r"\w+\.(html|htm|shtm|shtml|cgi|php|php3|asp|aspx|cfm|cfml|jsp|png|gif|jpg|java|class|webp|mp3|mp4|mov|pl|do)(\?\S*)?\b",
     flags=re.IGNORECASE,
@@ -145,9 +145,12 @@ def replace_text(text: str, replace_pairs: Iterable[Tuple[str, str]]) -> str:
 def normalize_text_pairs(text: str) -> str:
     return replace_text(text, COMBINED_NORMALIZE_PAIRS)
 
-
 def normalize_link(text: str, place_holder: str = REPLACE_LINK) -> str:
-    text = RE_HTTP_WWW.sub(place_holder, text)  # http, https, mailto, www.
+    text = RE_LINK.sub(place_holder, text)  # http, https, www.
+    return text
+
+def normalize_link_with_extension(text: str, place_holder: str = REPLACE_LINK) -> str:
+    text = RE_LINK.sub(place_holder, text)  # http, https, www.
     text = RE_EXT.sub(place_holder, text)  # .html, php3, .jpg
     return text
 
@@ -267,9 +270,9 @@ def preprocess(text: str) -> str:
     text = html.unescape(text)
     text = remove_tag(text)
 
-    text = normalize_link(text)
     text = normalize_at_mention(text)
     text = normalize_email(text)
+    text = normalize_link(text)
     text = normalize_phone(text)
     text = normalize_text_pairs(text)
     text = normalize_haha(text)
