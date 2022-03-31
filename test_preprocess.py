@@ -15,6 +15,7 @@ from th_preprocessor.preprocess import (
     normalize_emoji,
     normalize_haha,
     normalize_link,
+    normalize_link_with_extension,
     normalize_num,
     normalize_phone,
     normalize_special_chars,
@@ -41,6 +42,8 @@ class Test_preprocess(object):
         self.mix_text = "hey123ไม่ได้เป็นคนที่เกเรyoyo&แฮ่&&hello"
         self.unnorm_text = "เเําฤาฦา๑๒๓๔๕๖๗๘๙๐,.=\0\r\n\t\u00A0" + string.punctuation
         self.link_text = "http://www.youtube.com"
+        self.link_text_without_protocol = "google.com/search?q=hello"
+        self.link_with_extension = "https://en.wikipedia.org/wiki/Apple_Inc.#/media/File:Apple_logo_black.svg logo.svg"
         self.mention_text = "@test1234"
         self.email_text = "test_eiei_za@gmail.com"
         self.haha_text = "555555"
@@ -104,6 +107,12 @@ class Test_preprocess(object):
     def test_normalize_link(self):
         expected_result = " WSLINK "
         assert_equal(normalize_link(self.link_text), expected_result)
+        expected_result = " WSLINK "
+        assert_equal(normalize_link(self.link_text_without_protocol), expected_result)
+    
+    def test_normalize_link_with_extension(self):
+        expected_result = " WSLINK   WSLINK "
+        assert_equal(normalize_link_with_extension(self.link_with_extension), expected_result)
 
     def test_normalize_at_mention(self):
         expected_result = " WSNAME "
