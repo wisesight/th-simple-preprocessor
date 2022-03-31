@@ -140,6 +140,35 @@ class Test_preprocess(object):
         expected_result = "Saturday be like this      "
         assert_equal(remove_hashtags(self.hashtags_text), expected_result)
 
+    def test_remove_hashtags_with_underscore(self):
+        text = "ศูนย์ฉีดวัคซีน เปิด Walk in ทุกเข็ม #covid19 #covid_19 #covid-19"
+        expected_result = "ศูนย์ฉีดวัคซีน เปิด Walk in ทุกเข็ม   "
+        assert_equal(remove_hashtags(text), expected_result)
+
+    def test_remove_hashtags_with_punctuation(self):
+        text = "ฉลองครบรอบ #เซลใหญ่วันเกิด10ปี@Lazada พบทีเด็ดแบรนด์ดังแจกรางวัลสุดปัง รวมมูลค่ากว่า 3,300,000 บาท"
+        expected_result = (
+            "ฉลองครบรอบ  พบทีเด็ดแบรนด์ดังแจกรางวัลสุดปัง รวมมูลค่ากว่า 3,300,000 บาท"
+        )
+        assert_equal(remove_hashtags(text), expected_result)
+
+    def test_remove_hashtags_with_punctuation_only(self):
+        text = "ฉลองครบรอบ #%@&^%!%^%@^% พบทีเด็ดแบรนด์ดังแจกรางวัลสุดปัง รวมมูลค่ากว่า 3,300,000 บาท"
+        expected_result = (
+            "ฉลองครบรอบ  พบทีเด็ดแบรนด์ดังแจกรางวัลสุดปัง รวมมูลค่ากว่า 3,300,000 บาท"
+        )
+        assert_equal(remove_hashtags(text), expected_result)
+
+    def test_remove_hashtags_text_with_number(self):
+        text = "สวัสดีปีกุน #สวัสดี5555"
+        expected_result = "สวัสดีปีกุน "
+        assert_equal(remove_hashtags(text), expected_result)
+
+    def test_remove_hashtags_number_with_text(self):
+        text = "สวัสดีปีระกา #5555สวัสดี"
+        expected_result = "สวัสดีปีระกา "
+        assert_equal(remove_hashtags(text), expected_result)
+
     def test_remove_tag(self):
         expected_result = "Test HTML"
         assert_equal(remove_tag(self.tag_text), expected_result)
@@ -182,5 +211,6 @@ class Test_preprocess(object):
 
     def test_replace_dup_emojis_with_dup_numbers(self):
         expected_result = "👧 111111 3️⃣"
-        assert_equal(replace_dup_emojis(self.dup_emojis_text_with_dup_numbers), expected_result)
-        
+        assert_equal(
+            replace_dup_emojis(self.dup_emojis_text_with_dup_numbers), expected_result
+        )
