@@ -13,6 +13,7 @@ from th_preprocessor.preprocess import (
     normalize_at_mention,
     normalize_email,
     normalize_emoji,
+    normalize_filename,
     normalize_haha,
     normalize_link,
     normalize_num,
@@ -41,6 +42,8 @@ class Test_preprocess(object):
         self.mix_text = "hey123ไม่ได้เป็นคนที่เกเรyoyo&แฮ่&&hello"
         self.unnorm_text = "เเําฤาฦา๑๒๓๔๕๖๗๘๙๐,.=\0\r\n\t\u00A0" + string.punctuation
         self.link_text = "http://www.youtube.com"
+        self.link_text_without_protocol = "google.com/search?q=hello"
+        self.filename_text = "logo.png"
         self.mention_text = "@test1234"
         self.email_text = "test_eiei_za@gmail.com"
         self.haha_text = "555555"
@@ -104,6 +107,27 @@ class Test_preprocess(object):
     def test_normalize_link(self):
         expected_result = " WSLINK "
         assert_equal(normalize_link(self.link_text), expected_result)
+
+    def test_normalize_link_without_protocol(self):
+        expected_result = " WSLINK "
+        assert_equal(normalize_link(self.link_text_without_protocol), expected_result)
+
+    def test_normalize_link_text_with_dot(self):
+        text = "This is a book.This is a cat."
+        expected_result = "This is a book.This is a cat."
+        assert_equal(normalize_link(text), expected_result)
+
+    def test_normalize_link_email(self):
+        text = "foo.b@gmail.com"
+        expected_result = "foo.b@gmail.com"
+        assert_equal(normalize_link(text), expected_result)
+        text = "foo_foo@gmail.com"
+        expected_result = "foo_foo@gmail.com"
+        assert_equal(normalize_link(text), expected_result)
+
+    def test_normalize_filename(self):
+        expected_result = " WSFILENAME "
+        assert_equal(normalize_filename(self.filename_text), expected_result)
 
     def test_normalize_at_mention(self):
         expected_result = " WSNAME "
