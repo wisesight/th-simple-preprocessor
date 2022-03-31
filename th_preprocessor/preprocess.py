@@ -42,7 +42,7 @@ RE_EXT = re.compile(
     r"\w+\.(html|htm|shtm|shtml|cgi|php|php3|asp|aspx|cfm|cfml|jsp|png|gif|jpg|java|class|webp|mp3|mp4|mov|pl|do)(\?\S*)?\b",
     flags=re.IGNORECASE,
 )
-RE_AT_MENTION = re.compile(r"(?:^|\s)@\S+")
+RE_AT_MENTION = re.compile(r"(?<=^|(?<=[^a-zA-Z0-9-_\.]))@[^\s()\[\]{}<>]+")
 RE_EMAIL = re.compile(r"\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b")
 RE_HAHA = re.compile(r"\b(?:ha\s*){2,}|\u0E16{3,}|5{3,}(?!.\d)\b", flags=re.IGNORECASE)
 RE_HASHTAGS = re.compile(r"#[^\s]+")

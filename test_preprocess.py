@@ -54,6 +54,7 @@ class Test_preprocess(object):
         self.noodle_text = "˚┉┉┉┉┉༝✧ คิดว่าน่าจะเหลือแค่ภาษาไทย กับ ˢʰᵉ 𝙧𝙖𝙩𝙘𝙝𝙖𝙙𝙖𝙥𝙞𝙨𝙚𝙠 English และ  ﾏﾝﾎﾞﾏﾝﾎﾞ．．．ນະຄອນຫລ🤔🤔🤔🤔ວງ．ﺍﻟﻘﻔﺺ🤣"
         self.dup_emojis_text = "อ้ายอ้วน😣😣"
         self.dup_emojis_text_with_dup_numbers = "👧👧👧👧👧👧 111111 3️⃣3️⃣3️⃣3️⃣3️⃣3️⃣"
+        self.mention_text_with_non_whitespace = "twitter:@wisesight"
         self.complex_text = " ".join(
             [
                 self.tag_text,
@@ -107,6 +108,21 @@ class Test_preprocess(object):
     def test_normalize_at_mention(self):
         expected_result = " WSNAME "
         assert_equal(normalize_at_mention(self.mention_text), expected_result)
+
+    def test_normalize_at_mention_with_non_whitespace(self):
+        text = "twitter:@wisesight @123456 (มี@ด้วย)"
+        expected_result = "twitter: WSNAME   WSNAME  (มี WSNAME )"
+        assert_equal(normalize_at_mention(text), expected_result)
+
+    def test_normalize_at_mention_with_punctuation(self):
+        text = "This is not a mention in social media messages but it has to be cleaned: @#$%^@#$%^&"
+        expected_result = "This is not a mention in social media messages but it has to be cleaned:  WSNAME "
+        assert_equal(normalize_at_mention(text), expected_result)
+
+    def test_normalize_at_mention_email(self):
+        text = "email: example@something.com"
+        expected_result = "email: example@something.com"
+        assert_equal(normalize_at_mention(text), expected_result)
 
     def test_normalize_email(self):
         expected_result = " WSEMAIL "
