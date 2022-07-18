@@ -1,1 +1,1 @@
-emoji
+emoji==2.0.0
